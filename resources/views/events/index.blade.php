@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold mb-4">My Events</h1>
 
         <a href="{{ route('events.create') }}" 
-           class="bg-blue-500 text-white px-4 py-2 rounded">
+           class="bg-red text-black px-4 py-2 rounded">
             + Create Event
         </a>
 
@@ -12,7 +12,7 @@
                 <div class="bg-white p-4 mb-4 shadow rounded">
                     <h2 class="text-xl font-semibold">{{ $event->title }}</h2>
                     <p>{{ $event->description }}</p>
-                    <p class="text-sm text-gray-500">
+                    <p class="text-sm text-black">
                         {{ $event->event_date }} | {{ $event->location }}
                     </p>
 

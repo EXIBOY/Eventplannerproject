@@ -33,7 +33,7 @@
                        class="border p-2 w-full">
             </div>
 
-            <button class="bg-blue-500 text-white px-4 py-2 rounded">
+            <button class="bg-blue-500 text-black px-4 py-2 rounded">
                 Update Event
             </button>
         </form>

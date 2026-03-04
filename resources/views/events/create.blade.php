@@ -25,7 +25,7 @@
                 <input type="text" name="location" class="border p-2 w-full" required>
             </div>
 
-            <button class="bg-green-500 text-white px-4 py-2 rounded">
+            <button class="bg-green-500 text-black px-4 py-2 rounded">
                 Save Event
             </button>
         </form>
