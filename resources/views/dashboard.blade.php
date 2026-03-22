@@ -63,8 +63,8 @@
             </div>
         </section>
 
-        <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div class="app-panel px-5 py-6 sm:px-8 sm:py-8">
+        <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+            <div class="app-panel self-start px-5 py-6 sm:px-8 sm:py-8">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <span class="section-label">Schedule</span>
