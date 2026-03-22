@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -36,6 +38,65 @@ class EventController extends Controller
     {
         return view('events.create', [
             'event' => new Event(),
+        ]);
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $query = trim((string) $request->string('q'));
+
+        if ($query === '') {
+            return response()->json([
+                'events' => [],
+                'meta' => [
+                    'count' => 0,
+                    'query' => '',
+                ],
+            ]);
+        }
+
+        if (mb_strlen($query) < 2) {
+            return response()->json([
+                'events' => [],
+                'meta' => [
+                    'count' => 0,
+                    'query' => $query,
+                ],
+                'message' => 'Type at least 2 characters to search across all stored events.',
+            ]);
+        }
+
+        $today = today()->toDateString();
+        $like = '%'.$query.'%';
+
+        $events = Event::query()
+            ->with('user:id,name,email')
+            ->where(function ($builder) use ($like): void {
+                $builder
+                    ->where('title', 'like', $like)
+                    ->orWhere('description', 'like', $like)
+                    ->orWhere('location', 'like', $like)
+                    ->orWhereHas('user', function ($userQuery) use ($like): void {
+                        $userQuery
+                            ->where('name', 'like', $like)
+                            ->orWhere('email', 'like', $like);
+                    });
+            })
+            ->orderByRaw('CASE WHEN event_date >= ? THEN 0 ELSE 1 END', [$today])
+            ->orderByRaw('CASE WHEN event_date >= ? THEN event_date END ASC', [$today])
+            ->orderByRaw('CASE WHEN event_date < ? THEN event_date END DESC', [$today])
+            ->orderBy('title')
+            ->limit(12)
+            ->get()
+            ->map(fn (Event $event): array => $this->serializeSearchResult($event, (int) $request->user()->id))
+            ->values();
+
+        return response()->json([
+            'events' => $events,
+            'meta' => [
+                'count' => $events->count(),
+                'query' => $query,
+            ],
         ]);
     }
 
@@ -117,6 +178,25 @@ class EventController extends Controller
             'event_date_label' => $event->event_date?->format('l, d M Y'),
             'location' => $event->location,
             'edit_url' => route('events.edit', $event),
+        ];
+    }
+
+    /**
+     * @return array<string, bool|int|string|null>
+     */
+    private function serializeSearchResult(Event $event, int $viewerId): array
+    {
+        return [
+            'id' => $event->id,
+            'title' => $event->title,
+            'description_excerpt' => Str::limit($event->description ?: 'No description added yet.', 160),
+            'event_date' => $event->event_date?->toDateString(),
+            'event_date_label' => $event->event_date?->format('l, d M Y'),
+            'location' => $event->location,
+            'owner_name' => $event->user?->name,
+            'owner_email' => $event->user?->email,
+            'is_owner' => $event->user_id === $viewerId,
+            'edit_url' => $event->user_id === $viewerId ? route('events.edit', $event) : null,
         ];
     }
 }

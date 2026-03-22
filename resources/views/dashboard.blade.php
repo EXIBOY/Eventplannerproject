@@ -114,6 +114,10 @@
             </div>
 
             <div class="space-y-6">
+                @include('events.partials.search-panel', [
+                    'searchId' => 'dashboard-shared-event-search',
+                ])
+
                 <div class="app-panel px-6 py-6" data-weather-widget>
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
@@ -193,6 +197,7 @@
                     <h2 class="section-title mt-4 text-slate-950">How this dashboard behaves</h2>
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Events happening today stay in the upcoming count, so same-day work does not disappear from the active pipeline.</p>
+                        <p>The shared event search lets you look up events created by any user without opening the database manually.</p>
                         <p>Your event routes are now scoped to your own records, which prevents accidental edits to another user’s schedule.</p>
                         <p>The weather panel uses your browser’s device location and Open-Meteo data when you choose to load it.</p>
                         <p>Use the event list for edits, deletes, and a full view of both upcoming and archived plans.</p>

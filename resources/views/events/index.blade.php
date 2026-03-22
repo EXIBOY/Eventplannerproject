@@ -120,6 +120,10 @@
             </div>
 
             <div class="space-y-6">
+                @include('events.partials.search-panel', [
+                    'searchId' => 'library-shared-event-search',
+                ])
+
                 <div class="app-panel px-6 py-6">
                     <span class="section-label">Archive</span>
                     <h2 class="section-title mt-4 text-slate-950">Completed events</h2>
@@ -153,6 +157,7 @@
                         <p>Event lists are sorted by date so the next milestone stays on top.</p>
                         <p>Validation now protects empty titles, locations, and malformed dates.</p>
                         <p>Create, update, and delete flows now support AJAX feedback instead of depending on a full page refresh.</p>
+                        <p>The search panel uses AJAX to look through events created by any user and show matches instantly.</p>
                         <p>Each edit and delete action is scoped to the signed-in user’s own events.</p>
                     </div>
                 </div>

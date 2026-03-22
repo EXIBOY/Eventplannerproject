@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/events/search', [EventController::class, 'search'])->name('events.search');
     Route::resource('events', EventController::class)->except('show');
 });
 

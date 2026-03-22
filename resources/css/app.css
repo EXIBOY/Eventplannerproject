@@ -92,6 +92,14 @@
         @apply mt-2 text-sm text-rose-700;
     }
 
+    .search-result-card {
+        @apply rounded-[22px] border border-slate-100 bg-slate-50 px-5 py-5;
+    }
+
+    .search-result-meta {
+        @apply text-xs font-semibold uppercase tracking-[0.22em] text-slate-500;
+    }
+
     .action-row {
         @apply flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center;
     }

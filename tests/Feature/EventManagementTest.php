@@ -59,6 +59,31 @@ test('users can only see their own events on the index page', function () {
     $response->assertDontSee('Hidden Event');
 });
 
+test('authenticated users can search events created by any user with ajax', function () {
+    $viewer = User::factory()->create();
+    $owner = User::factory()->create([
+        'name' => 'Shared Planner',
+        'email' => 'shared-planner@example.com',
+    ]);
+
+    Event::factory()->for($owner)->create([
+        'title' => 'Cross-Team Summit',
+        'description' => 'Shared planning event.',
+        'location' => 'Birmingham',
+    ]);
+
+    $response = $this->actingAs($viewer)->getJson(route('events.search', [
+        'q' => 'Shared Planner',
+    ]));
+
+    $response
+        ->assertOk()
+        ->assertJsonPath('meta.count', 1)
+        ->assertJsonPath('events.0.title', 'Cross-Team Summit')
+        ->assertJsonPath('events.0.owner_name', 'Shared Planner')
+        ->assertJsonPath('events.0.is_owner', false);
+});
+
 test('users cannot update events they do not own', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
