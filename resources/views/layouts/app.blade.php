@@ -23,15 +23,15 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="px-4 pt-6 sm:px-6 lg:px-8">
-                    <div class="mx-auto max-w-6xl app-panel px-6 py-5 sm:px-8">
+                <header class="px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8">
+                    <div class="mx-auto max-w-6xl app-panel px-5 py-4 sm:px-8 sm:py-5">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
 
             <!-- Page Content -->
-            <main class="px-4 pb-12 pt-6 sm:px-6 lg:px-8">
+            <main class="px-4 pb-10 pt-4 sm:px-6 sm:pb-12 sm:pt-6 lg:px-8">
                 {{ $slot }}
             </main>
         </div>

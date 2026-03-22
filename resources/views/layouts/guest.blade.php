@@ -18,17 +18,17 @@
         @endif
     </head>
     <body class="font-sans antialiased text-slate-900">
-        <div class="app-surface px-4 py-8 sm:px-6">
+        <div class="app-surface px-4 py-6 sm:px-6 sm:py-8">
             <div class="mx-auto w-full max-w-md">
                 <a href="{{ route('home') }}" class="mx-auto flex w-fit items-center gap-3">
-                    <x-application-logo class="h-14 w-14" />
+                    <x-application-logo class="h-12 w-12 sm:h-14 sm:w-14" />
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.32em] text-orange-600">Event Planner</p>
-                        <p class="text-2xl text-slate-950">Event Planner</p>
+                        <p class="text-xl text-slate-950 sm:text-2xl">Event Planner</p>
                     </div>
                 </a>
 
-                <div class="mt-6 app-panel px-6 py-6 sm:px-8 sm:py-8">
+                <div class="mt-6 app-panel px-5 py-5 sm:px-8 sm:py-8">
                     {{ $slot }}
                 </div>
             </div>

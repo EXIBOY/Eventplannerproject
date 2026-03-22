@@ -74,7 +74,7 @@
 
     <div class="soft-rule"></div>
 
-    <div class="flex flex-wrap items-center gap-3">
+    <div class="action-row">
         <button type="submit" class="btn-primary">
             {{ $submitLabel }}
         </button>

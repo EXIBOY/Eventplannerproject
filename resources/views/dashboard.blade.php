@@ -1,17 +1,17 @@
 <x-app-layout>
     <div class="mx-auto max-w-6xl space-y-6">
-        <section class="app-panel mesh-accent overflow-hidden px-7 py-8 sm:px-10 sm:py-10">
+        <section class="app-panel mesh-accent overflow-hidden px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
             <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
                 <div>
                     <span class="section-label">Control Room</span>
-                    <h1 class="mt-5 text-5xl leading-[0.96] text-slate-950 sm:text-6xl">
+                    <h1 class="page-hero-title mt-5 text-slate-950">
                         Keep your event calendar sharp and visible.
                     </h1>
-                    <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+                    <p class="lede-copy mt-5 max-w-2xl text-slate-600">
                         Review the pipeline, spot the next milestone, and update your event schedule before details slip.
                     </p>
 
-                    <div class="mt-8 flex flex-wrap gap-3">
+                    <div class="action-row mt-8">
                         <a href="{{ route('events.create') }}" class="btn-primary">
                             Add New Event
                         </a>
@@ -25,7 +25,7 @@
                     <p class="text-sm font-semibold uppercase tracking-[0.25em] text-orange-300">Next Up</p>
 
                     @if ($nextEvent)
-                        <h2 class="mt-4 text-4xl text-white">{{ $nextEvent->title }}</h2>
+                        <h2 class="page-title mt-4 text-white">{{ $nextEvent->title }}</h2>
                         <p class="mt-4 text-sm uppercase tracking-[0.22em] text-white/55">
                             {{ $nextEvent->event_date->format('l, d M Y') }}
                         </p>
@@ -46,29 +46,29 @@
         <section class="grid gap-4 md:grid-cols-3">
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Total Events</p>
-                <p class="mt-4 text-5xl font-semibold text-slate-950">{{ $eventCount }}</p>
+                <p class="metric-number mt-4 text-slate-950">{{ $eventCount }}</p>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Every active and completed event in your workspace.</p>
             </div>
 
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Upcoming</p>
-                <p class="mt-4 text-5xl font-semibold text-slate-950">{{ $upcomingEvents }}</p>
+                <p class="metric-number mt-4 text-slate-950">{{ $upcomingEvents }}</p>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Includes events scheduled for today and all future dates.</p>
             </div>
 
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Recent Activity</p>
-                <p class="mt-4 text-5xl font-semibold text-slate-950">{{ $recentActivity->count() }}</p>
+                <p class="metric-number mt-4 text-slate-950">{{ $recentActivity->count() }}</p>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Your latest completed events, kept handy for quick reference.</p>
             </div>
         </section>
 
         <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div class="app-panel px-7 py-8 sm:px-8">
-                <div class="flex items-center justify-between gap-4">
+            <div class="app-panel px-5 py-6 sm:px-8 sm:py-8">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <span class="section-label">Schedule</span>
-                        <h2 class="mt-4 text-4xl text-slate-950">Upcoming timeline</h2>
+                        <h2 class="page-title mt-4 text-slate-950">Upcoming timeline</h2>
                     </div>
 
                     <a href="{{ route('events.index') }}" class="btn-secondary">
@@ -80,14 +80,14 @@
                     @forelse ($upcomingSchedule->take(4) as $event)
                         <div class="event-card">
                             <div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-                                <div class="flex items-start gap-4">
-                                    <div class="rounded-[22px] bg-orange-100 px-4 py-3 text-center text-orange-700">
+                                <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
+                                    <div class="shrink-0 self-start rounded-[22px] bg-orange-100 px-4 py-3 text-center text-orange-700">
                                         <p class="text-xs font-semibold uppercase tracking-[0.2em]">{{ $event->event_date->format('M') }}</p>
                                         <p class="mt-1 text-3xl font-semibold text-orange-900">{{ $event->event_date->format('d') }}</p>
                                     </div>
 
                                     <div>
-                                        <h3 class="text-2xl text-slate-950">{{ $event->title }}</h3>
+                                        <h3 class="card-title text-slate-950">{{ $event->title }}</h3>
                                         <p class="mt-2 text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
                                             {{ $event->event_date->format('l') }} · {{ $event->location }}
                                         </p>
@@ -118,7 +118,7 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <span class="section-label">Local Weather</span>
-                            <h2 class="mt-4 text-3xl text-slate-950">Live conditions</h2>
+                            <h2 class="section-title mt-4 text-slate-950">Live conditions</h2>
                         </div>
 
                         <button type="button" class="btn-secondary !px-4 !py-2 !text-xs" data-weather-trigger>
@@ -135,8 +135,8 @@
                             Current device location
                         </p>
 
-                        <div class="mt-4 flex items-end gap-4">
-                            <p class="text-5xl font-semibold text-white" data-weather-temperature>--</p>
+                        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
+                            <p class="text-4xl font-semibold text-white sm:text-5xl" data-weather-temperature>--</p>
 
                             <div class="pb-1">
                                 <p class="text-lg font-semibold text-white" data-weather-description>
@@ -169,7 +169,7 @@
 
                 <div class="app-panel px-6 py-6">
                     <span class="section-label">Completed</span>
-                    <h2 class="mt-4 text-3xl text-slate-950">Recent wrap-ups</h2>
+                    <h2 class="section-title mt-4 text-slate-950">Recent wrap-ups</h2>
 
                     <div class="mt-6 space-y-4">
                         @forelse ($recentActivity as $event)
@@ -177,7 +177,7 @@
                                 <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
                                     {{ $event->event_date->format('d M Y') }}
                                 </p>
-                                <h3 class="mt-2 text-2xl text-slate-950">{{ $event->title }}</h3>
+                                <h3 class="card-title mt-2 text-slate-950">{{ $event->title }}</h3>
                                 <p class="mt-2 text-sm text-slate-600">{{ $event->location }}</p>
                             </div>
                         @empty
@@ -190,7 +190,7 @@
 
                 <div class="app-panel px-6 py-6">
                     <span class="section-label">Quick Notes</span>
-                    <h2 class="mt-4 text-3xl text-slate-950">How this dashboard behaves</h2>
+                    <h2 class="section-title mt-4 text-slate-950">How this dashboard behaves</h2>
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Events happening today stay in the upcoming count, so same-day work does not disappear from the active pipeline.</p>
                         <p>Your event routes are now scoped to your own records, which prevents accidental edits to another user’s schedule.</p>

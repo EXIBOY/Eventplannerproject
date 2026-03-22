@@ -1,12 +1,12 @@
 <nav x-data="{ open: false }" class="px-4 pt-4 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-6xl rounded-[30px] border border-slate-900/10 bg-slate-950/90 px-4 py-4 text-white shadow-[0_30px_80px_rgba(15,23,42,0.35)] backdrop-blur sm:px-6">
+    <div class="mx-auto max-w-6xl rounded-[24px] border border-slate-900/10 bg-slate-950/90 px-4 py-3 text-white shadow-[0_24px_60px_rgba(15,23,42,0.35)] backdrop-blur sm:rounded-[30px] sm:px-6 sm:py-4 sm:shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
         <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <x-application-logo class="h-11 w-11" />
-                    <div class="hidden sm:block">
-                        <p class="text-[11px] font-semibold uppercase tracking-[0.32em] text-orange-300">Event Planner</p>
-                        <p class="text-xl text-white">Event Planner</p>
+            <div class="flex min-w-0 items-center gap-3 sm:gap-4">
+                <a href="{{ route('dashboard') }}" class="flex min-w-0 items-center gap-3">
+                    <x-application-logo class="h-10 w-10 sm:h-11 sm:w-11" />
+                    <div class="min-w-0">
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-orange-300 sm:text-[11px] sm:tracking-[0.32em]">Event Planner</p>
+                        <p class="truncate text-base text-white sm:text-xl">Event Planner</p>
                     </div>
                 </a>
 
