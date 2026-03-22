@@ -63,7 +63,10 @@
                 required
             >
             <p class="status-copy mt-2 text-xs leading-6 text-slate-500" data-location-status>
-                Browser location can fill this with your current coordinates if the venue is where you are right now.
+                Browser location can fill this with your current street address if the venue is where you are right now.
+            </p>
+            <p class="mt-1 text-[11px] leading-6 text-slate-400">
+                Address lookup uses OpenStreetMap Nominatim data.
             </p>
             <x-input-error :messages="$errors->get('location')" class="mt-2" />
         </div>
