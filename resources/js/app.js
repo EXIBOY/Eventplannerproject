@@ -1,4 +1,5 @@
 import './bootstrap';
+import './location-weather';
 
 import Alpine from 'alpinejs';
 

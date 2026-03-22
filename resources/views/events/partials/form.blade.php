@@ -45,8 +45,13 @@
             <x-input-error :messages="$errors->get('event_date')" class="mt-2" />
         </div>
 
-        <div>
-            <label for="location" class="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Location</label>
+        <div data-device-location>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <label for="location" class="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Location</label>
+                <button type="button" class="btn-secondary !px-4 !py-2 !text-xs" data-location-trigger>
+                    Use My Location
+                </button>
+            </div>
             <input
                 id="location"
                 type="text"
@@ -54,8 +59,12 @@
                 value="{{ old('location', $event->location) }}"
                 class="form-input"
                 placeholder="Sea Containers, London"
+                data-location-input
                 required
             >
+            <p class="status-copy mt-2 text-xs leading-6 text-slate-500" data-location-status>
+                Browser location can fill this with your current coordinates if the venue is where you are right now.
+            </p>
             <x-input-error :messages="$errors->get('location')" class="mt-2" />
         </div>
     </div>

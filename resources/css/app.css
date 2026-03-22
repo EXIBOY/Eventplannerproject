@@ -68,6 +68,22 @@
         @apply h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent;
     }
 
+    .status-copy {
+        @apply transition-colors duration-200;
+    }
+
+    .weather-metric {
+        @apply rounded-[22px] border border-slate-100 bg-slate-50 px-4 py-4;
+    }
+
+    .weather-metric-label {
+        @apply text-xs font-semibold uppercase tracking-[0.2em] text-slate-500;
+    }
+
+    .weather-metric-value {
+        @apply mt-2 text-2xl font-semibold text-slate-950;
+    }
+
     .mesh-accent {
         background-image:
             radial-gradient(circle at 20% 20%, rgba(251, 146, 60, 0.22), transparent 13rem),
