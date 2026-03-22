@@ -21,16 +21,16 @@
                     <span class="section-label">Checklist</span>
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Use a clear event title people will recognize instantly.</p>
-                        <p>Add the city, venue, or workspace in the location field.</p>
+                        <p>Add timing, status, category, and visibility so search and reminders work well.</p>
                         <p>Descriptions work best as short operational briefs, not marketing copy.</p>
                     </div>
                 </div>
 
                 <div class="app-panel px-6 py-6">
                     <span class="section-label">Tip</span>
-                    <p class="section-title mt-4 text-slate-950">Start simple.</p>
+                    <p class="section-title mt-4 text-slate-950">Plan for follow-up.</p>
                     <p class="mt-3 text-sm leading-7 text-slate-600">
-                        Once the event exists, it will immediately appear on your dashboard and event list for follow-up.
+                        Once the event exists, you can share a detail page, export it to calendar, and send reminders without rebuilding the event.
                     </p>
                 </div>
             </aside>

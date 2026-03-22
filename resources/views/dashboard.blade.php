@@ -18,6 +18,9 @@
                         <a href="{{ route('events.index') }}" class="btn-secondary">
                             Review All Events
                         </a>
+                        <a href="{{ route('events.calendar') }}" class="btn-secondary">
+                            Export Calendar
+                        </a>
                     </div>
                 </div>
 
@@ -27,12 +30,25 @@
                     @if ($nextEvent)
                         <h2 class="page-title mt-4 text-white">{{ $nextEvent->title }}</h2>
                         <p class="mt-4 text-sm uppercase tracking-[0.22em] text-white/55">
-                            {{ $nextEvent->event_date->format('l, d M Y') }}
+                            {{ $nextEvent->event_date->format('l, d M Y') }} · {{ $nextEvent->timeLabel() }}
                         </p>
                         <p class="mt-3 text-base text-white/80">{{ $nextEvent->location }}</p>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">{{ $nextEvent->statusLabel() }}</span>
+                            <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">{{ $nextEvent->categoryLabel() }}</span>
+                            <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">{{ $nextEvent->visibilityLabel() }}</span>
+                        </div>
                         <p class="mt-5 text-sm leading-7 text-white/70">
                             {{ $nextEvent->description ?: 'No description added yet. Open the event to capture the brief, stakeholders, or production notes.' }}
                         </p>
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <a href="{{ route('events.show', $nextEvent) }}" class="btn-secondary !border-white/15 !bg-white/10 !text-white">
+                                View Event
+                            </a>
+                            <a href="{{ route('events.export', $nextEvent) }}" class="btn-secondary !border-white/15 !bg-white/10 !text-white">
+                                Calendar
+                            </a>
+                        </div>
                     @else
                         <h2 class="mt-4 text-4xl text-white">No upcoming events yet</h2>
                         <p class="mt-5 text-sm leading-7 text-white/70">
@@ -57,9 +73,9 @@
             </div>
 
             <div class="stat-card">
-                <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Recent Activity</p>
-                <p class="metric-number mt-4 text-slate-950">{{ $recentActivity->count() }}</p>
-                <p class="mt-3 text-sm leading-6 text-slate-600">Your latest completed events, kept handy for quick reference.</p>
+                <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Reminders</p>
+                <p class="metric-number mt-4 text-slate-950">{{ $pendingReminders }}</p>
+                <p class="mt-3 text-sm leading-6 text-slate-600">Upcoming events with reminder windows still pending.</p>
             </div>
         </section>
 
@@ -89,17 +105,26 @@
                                     <div>
                                         <h3 class="card-title text-slate-950">{{ $event->title }}</h3>
                                         <p class="mt-2 text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-                                            {{ $event->event_date->format('l') }} · {{ $event->location }}
+                                            {{ $event->event_date->format('l') }} · {{ $event->timeLabel() }} · {{ $event->location }}
                                         </p>
+                                        <div class="mt-3 flex flex-wrap gap-2">
+                                            <span class="event-tag">{{ $event->statusLabel() }}</span>
+                                            <span class="event-tag">{{ $event->categoryLabel() }}</span>
+                                        </div>
                                         <p class="mt-3 text-sm leading-7 text-slate-600">
                                             {{ $event->description ?: 'No summary added yet. Open the event to complete the planning brief.' }}
                                         </p>
                                     </div>
                                 </div>
 
-                                <a href="{{ route('events.edit', $event) }}" class="btn-secondary">
-                                    Edit
-                                </a>
+                                <div class="action-row md:justify-end">
+                                    <a href="{{ route('events.show', $event) }}" class="btn-secondary">
+                                        View
+                                    </a>
+                                    <a href="{{ route('events.edit', $event) }}" class="btn-secondary">
+                                        Edit
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     @empty
@@ -198,9 +223,10 @@
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Events happening today stay in the upcoming count, so same-day work does not disappear from the active pipeline.</p>
                         <p>The shared event search lets you look up events created by any user without opening the database manually.</p>
+                        <p>Each event now carries status, category, timing, visibility, and reminder metadata so records feel complete.</p>
                         <p>Your event routes are now scoped to your own records, which prevents accidental edits to another user’s schedule.</p>
                         <p>The weather panel uses your browser’s device location and Open-Meteo data when you choose to load it.</p>
-                        <p>Use the event list for edits, deletes, and a full view of both upcoming and archived plans.</p>
+                        <p>Use the event list for edits, exports, reminders, and a full view of both upcoming and archived plans.</p>
                     </div>
                 </div>
             </div>

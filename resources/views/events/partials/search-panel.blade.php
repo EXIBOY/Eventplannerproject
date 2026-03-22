@@ -14,14 +14,74 @@
     <input
         id="{{ $searchId }}"
         type="search"
+        name="q"
         class="form-input"
         placeholder="Try Spring Brand Launch, London, or planner@example.com"
         autocomplete="off"
-        data-search-input
+        data-search-field
     >
 
+    <div class="search-filter-grid">
+        <label class="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Scope
+            <select name="scope" class="form-input !mt-2" data-search-field>
+                <option value="all">All visible events</option>
+                <option value="mine">Only my events</option>
+                <option value="shared">Only shared events</option>
+            </select>
+        </label>
+
+        <label class="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Timeframe
+            <select name="timeframe" class="form-input !mt-2" data-search-field>
+                <option value="all">All dates</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="past">Past</option>
+            </select>
+        </label>
+
+        <label class="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Status
+            <select name="status" class="form-input !mt-2" data-search-field>
+                <option value="any">Any status</option>
+                @foreach (\App\Models\Event::statusOptions() as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </label>
+
+        <label class="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Category
+            <select name="category" class="form-input !mt-2" data-search-field>
+                <option value="any">Any category</option>
+                @foreach (\App\Models\Event::categoryOptions() as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </label>
+
+        <label class="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Visibility
+            <select name="visibility" class="form-input !mt-2" data-search-field>
+                <option value="any">Any visibility</option>
+                @foreach (\App\Models\Event::visibilityOptions() as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </label>
+
+        <label class="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Sort by
+            <select name="sort" class="form-input !mt-2" data-search-field>
+                <option value="soonest">Soonest first</option>
+                <option value="latest">Latest first</option>
+                <option value="title">Title</option>
+            </select>
+        </label>
+    </div>
+
     <p class="status-copy mt-3 text-sm leading-7 text-slate-500" data-search-status>
-        Type at least 2 characters to search events created by any user in the database.
+        Search by title, location, organizer, category, status, or visibility to find events stored in the database.
     </p>
 
     <div class="mt-5 space-y-3" data-search-results></div>

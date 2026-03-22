@@ -11,6 +11,10 @@ function query(root, selector) {
     return root.querySelector(selector);
 }
 
+function queryAll(root, selector) {
+    return Array.from(root.querySelectorAll(selector));
+}
+
 function pluralizeResults(count) {
     return `${count} ${count === 1 ? 'match' : 'matches'}`;
 }
@@ -22,6 +26,24 @@ function escapeHtml(value) {
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#39;');
+}
+
+function getFilters(widget) {
+    return queryAll(widget, '[data-search-field]').reduce((filters, field) => {
+        filters[field.name] = field.value.trim();
+
+        return filters;
+    }, {});
+}
+
+function hasSearchIntent(filters) {
+    return Object.entries(filters).some(([key, value]) => {
+        if (key === 'sort') {
+            return false;
+        }
+
+        return value !== '' && value !== 'all' && value !== 'any';
+    }) || (filters.q ?? '') !== '';
 }
 
 function renderSearchResults(widget, events) {
@@ -54,12 +76,19 @@ function renderSearchResults(widget, events) {
                         <p class="search-result-meta">Created by ${escapeHtml(ownerLabel)}</p>
                         <h3 class="card-title mt-2 text-slate-950">${escapeHtml(event.title)}</h3>
                         <p class="mt-2 text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-                            ${escapeHtml(event.event_date_label ?? 'Date unavailable')} · ${escapeHtml(event.location ?? 'Location unavailable')}
+                            ${escapeHtml(event.event_date_label ?? 'Date unavailable')} · ${escapeHtml(event.time_label ?? 'All day')} · ${escapeHtml(event.location ?? 'Location unavailable')}
                         </p>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="event-tag">${escapeHtml(event.status_label ?? 'Status')}</span>
+                            <span class="event-tag">${escapeHtml(event.category_label ?? 'Category')}</span>
+                            <span class="event-tag">${escapeHtml(event.visibility_label ?? 'Visibility')}</span>
+                        </div>
                         <p class="mt-3 text-sm leading-7 text-slate-600">${escapeHtml(event.description_excerpt ?? '')}</p>
                     </div>
 
-                    <div class="flex shrink-0 items-center gap-2">
+                    <div class="flex shrink-0 flex-wrap items-center gap-2">
+                        <a href="${escapeHtml(event.view_url)}" class="btn-secondary !px-4 !py-2 !text-xs">View</a>
+                        <a href="${escapeHtml(event.calendar_url)}" class="btn-secondary !px-4 !py-2 !text-xs">Calendar</a>
                         ${event.is_owner ? '<span class="event-tag">Your event</span>' : ''}
                         ${action}
                     </div>
@@ -71,12 +100,12 @@ function renderSearchResults(widget, events) {
 
 function initEventSearch() {
     document.querySelectorAll('[data-event-search]').forEach((widget) => {
-        const input = query(widget, '[data-search-input]');
         const status = query(widget, '[data-search-status]');
         const count = query(widget, '[data-search-count]');
         const searchUrl = widget.dataset.searchUrl;
+        const fields = queryAll(widget, '[data-search-field]');
 
-        if (!input || !status || !count || !searchUrl) {
+        if (!status || !count || !searchUrl || fields.length === 0) {
             return;
         }
 
@@ -89,10 +118,8 @@ function initEventSearch() {
             count.textContent = pluralizeResults(countValue);
         };
 
-        updateState('Type at least 2 characters to search events created by any user in the database.', 0);
-
-        input.addEventListener('input', () => {
-            const term = input.value.trim();
+        const runSearch = () => {
+            const filters = getFilters(widget);
 
             window.clearTimeout(debounceId);
 
@@ -101,29 +128,27 @@ function initEventSearch() {
                 controller = null;
             }
 
-            if (term === '') {
+            if (!hasSearchIntent(filters)) {
                 currentQuery = '';
                 renderSearchResults(widget, []);
                 query(widget, '[data-search-empty]')?.classList.add('hidden');
-                updateState('Type at least 2 characters to search events created by any user in the database.', 0);
-                return;
-            }
-
-            if (term.length < 2) {
-                currentQuery = term;
-                renderSearchResults(widget, []);
-                updateState('Keep typing. Search starts after 2 characters.', 0);
+                updateState('Search by title, location, organizer, category, status, or visibility to find events stored in the database.', 0);
                 return;
             }
 
             debounceId = window.setTimeout(async () => {
-                currentQuery = term;
+                currentQuery = JSON.stringify(filters);
                 controller = new AbortController();
-                updateState(`Searching for "${term}"...`, 0);
+                updateState('Searching stored events...', 0);
 
                 try {
                     const url = new URL(searchUrl, window.location.origin);
-                    url.searchParams.set('q', term);
+
+                    Object.entries(filters).forEach(([key, value]) => {
+                        if (value !== '') {
+                            url.searchParams.set(key, value);
+                        }
+                    });
 
                     const response = await fetch(url.toString(), {
                         headers: {
@@ -139,7 +164,7 @@ function initEventSearch() {
 
                     const payload = await response.json();
 
-                    if (currentQuery !== term) {
+                    if (currentQuery !== JSON.stringify(filters)) {
                         return;
                     }
 
@@ -147,9 +172,7 @@ function initEventSearch() {
 
                     renderSearchResults(widget, events);
                     updateState(
-                        events.length === 0
-                            ? `No stored events matched "${term}".`
-                            : `Showing matches for "${term}".`,
+                        events.length === 0 ? 'No stored events matched those filters.' : 'Showing matching events.',
                         events.length,
                     );
                 } catch (error) {
@@ -167,7 +190,13 @@ function initEventSearch() {
                     controller = null;
                 }
             }, 250);
+        };
+
+        fields.forEach((field) => {
+            field.addEventListener(field.tagName === 'SELECT' ? 'change' : 'input', runSearch);
         });
+
+        updateState('Search by title, location, organizer, category, status, or visibility to find events stored in the database.', 0);
     });
 }
 

@@ -100,6 +100,26 @@
         @apply text-xs font-semibold uppercase tracking-[0.22em] text-slate-500;
     }
 
+    .search-filter-grid {
+        @apply mt-5 grid gap-3 sm:grid-cols-2;
+    }
+
+    .detail-grid {
+        @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+    }
+
+    .detail-card {
+        @apply rounded-[22px] border border-slate-100 bg-slate-50 px-5 py-4;
+    }
+
+    .detail-label {
+        @apply text-xs font-semibold uppercase tracking-[0.2em] text-slate-500;
+    }
+
+    .detail-value {
+        @apply mt-2 text-lg font-semibold text-slate-950;
+    }
+
     .action-row {
         @apply flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center;
     }

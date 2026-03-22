@@ -20,14 +20,19 @@
                 <div class="app-panel px-6 py-6">
                     <span class="section-label">Current Status</span>
                     <p class="section-title mt-4 text-slate-950">{{ $event->event_date->format('d M Y') }}</p>
-                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ $event->location }}</p>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ $event->timeLabel() }} · {{ $event->location }}</p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="event-tag">{{ $event->statusLabel() }}</span>
+                        <span class="event-tag">{{ $event->categoryLabel() }}</span>
+                        <span class="event-tag">{{ $event->visibilityLabel() }}</span>
+                    </div>
                 </div>
 
                 <div class="app-panel px-6 py-6">
                     <span class="section-label">Reminder</span>
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Keep titles short and specific so the dashboard remains easy to scan.</p>
-                        <p>If the event is complete, you can leave it in place. It will move into the archived section automatically once the date passes.</p>
+                        <p>If the schedule changes, the reminder clock resets so the event can notify again at the new time.</p>
                     </div>
                 </div>
             </aside>

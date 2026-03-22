@@ -17,6 +17,9 @@
                     <a href="{{ route('dashboard') }}" class="btn-secondary">
                         Back to Dashboard
                     </a>
+                    <a href="{{ route('events.calendar') }}" class="btn-secondary">
+                        Export Calendar
+                    </a>
                 </div>
             </div>
         </section>
@@ -29,7 +32,7 @@
 
         <div class="ajax-feedback hidden" data-event-action-feedback aria-live="polite"></div>
 
-        <section class="grid gap-4 md:grid-cols-3">
+        <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Upcoming</p>
                 <p class="metric-number mt-4 text-slate-950" data-upcoming-count>{{ $upcomingEvents->count() }}</p>
@@ -39,6 +42,13 @@
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Archived</p>
                 <p class="metric-number mt-4 text-slate-950">{{ $pastEvents->count() }}</p>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Past events kept available for notes, references, and revisions.</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Confirmed</p>
+                <p class="section-title mt-4 text-slate-950">
+                    {{ $statusBreakdown[\App\Models\Event::STATUS_CONFIRMED] ?? 0 }}
+                </p>
+                <p class="mt-3 text-sm leading-6 text-slate-600">Events currently marked confirmed and ready to run.</p>
             </div>
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Focus</p>
@@ -78,8 +88,16 @@
                                         </div>
 
                                         <p class="mt-2 text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-                                            {{ $event->event_date->format('l, d M Y') }} · {{ $event->location }}
+                                            {{ $event->event_date->format('l, d M Y') }} · {{ $event->timeLabel() }} · {{ $event->location }}
                                         </p>
+                                        <div class="mt-3 flex flex-wrap gap-2">
+                                            <span class="event-tag">{{ $event->statusLabel() }}</span>
+                                            <span class="event-tag">{{ $event->categoryLabel() }}</span>
+                                            <span class="event-tag">{{ $event->visibilityLabel() }}</span>
+                                            @if ($event->capacity)
+                                                <span class="event-tag">{{ $event->capacity }} capacity</span>
+                                            @endif
+                                        </div>
 
                                         <p class="mt-4 text-sm leading-7 text-slate-600">
                                             {{ $event->description ?: 'No description added yet. Use edit to capture the planning brief for this event.' }}
@@ -88,8 +106,14 @@
                                 </div>
 
                                 <div class="action-row lg:justify-end">
+                                    <a href="{{ route('events.show', $event) }}" class="btn-secondary">
+                                        View
+                                    </a>
                                     <a href="{{ route('events.edit', $event) }}" class="btn-secondary">
                                         Edit
+                                    </a>
+                                    <a href="{{ route('events.export', $event) }}" class="btn-secondary">
+                                        Calendar
                                     </a>
 
                                     <form action="{{ route('events.destroy', $event) }}" method="POST" data-event-delete-form>
@@ -132,10 +156,14 @@
                         @forelse ($pastEvents as $event)
                             <div class="rounded-[22px] border border-slate-100 bg-slate-50 px-5 py-4">
                                 <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
-                                    {{ $event->event_date->format('d M Y') }}
+                                    {{ $event->event_date->format('d M Y') }} · {{ $event->timeLabel() }}
                                 </p>
                                 <h3 class="card-title mt-2 text-slate-950">{{ $event->title }}</h3>
                                 <p class="mt-2 text-sm text-slate-600">{{ $event->location }}</p>
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    <span class="event-tag">{{ $event->statusLabel() }}</span>
+                                    <span class="event-tag">{{ $event->categoryLabel() }}</span>
+                                </div>
                                 @if ($event->description)
                                     <p class="mt-3 text-sm leading-7 text-slate-600">
                                         {{ \Illuminate\Support\Str::limit($event->description, 120) }}
@@ -155,10 +183,10 @@
                     <h2 class="section-title mt-4 text-slate-950">What changed</h2>
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Event lists are sorted by date so the next milestone stays on top.</p>
-                        <p>Validation now protects empty titles, locations, and malformed dates.</p>
+                        <p>Validation now protects timing, reminder settings, visibility, organizer fields, and malformed dates.</p>
                         <p>Create, update, and delete flows now support AJAX feedback instead of depending on a full page refresh.</p>
-                        <p>The search panel uses AJAX to look through events created by any user and show matches instantly.</p>
-                        <p>Each edit and delete action is scoped to the signed-in user’s own events.</p>
+                        <p>The search panel uses AJAX filters to look through events created by any user and show matches instantly.</p>
+                        <p>Each edit and delete action is policy-scoped to the signed-in user’s own events unless an admin is viewing.</p>
                     </div>
                 </div>
             </div>

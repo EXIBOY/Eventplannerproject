@@ -99,7 +99,16 @@ function syncFormWithEvent(form, event) {
         title: event.title ?? '',
         description: event.description ?? '',
         event_date: event.event_date ?? '',
+        start_time: event.start_time ?? '',
+        end_time: event.end_time ?? '',
+        status: event.status ?? '',
+        category: event.category ?? '',
         location: event.location ?? '',
+        organizer_name: event.organizer_name ?? '',
+        organizer_email: event.organizer_email ?? '',
+        capacity: event.capacity ?? '',
+        visibility: event.visibility ?? '',
+        reminder_minutes: event.reminder_minutes ?? '',
     };
 
     Object.entries(fieldMap).forEach(([field, value]) => {

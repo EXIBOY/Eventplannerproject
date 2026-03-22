@@ -158,17 +158,17 @@
                         <div class="app-panel px-6 py-6">
                             <span class="section-label">Capture</span>
                             <h2 class="section-title mt-4 text-slate-950">Brief each event clearly</h2>
-                            <p class="mt-3 text-sm leading-7 text-slate-600">Store the essentials for each event with clean forms and validation that keeps records consistent.</p>
+                            <p class="mt-3 text-sm leading-7 text-slate-600">Store timing, visibility, reminders, organizer details, and capacity with validation that keeps records consistent.</p>
                         </div>
                         <div class="app-panel px-6 py-6">
                             <span class="section-label">Track</span>
                             <h2 class="section-title mt-4 text-slate-950">See upcoming work instantly</h2>
-                            <p class="mt-3 text-sm leading-7 text-slate-600">The dashboard separates what is next from what is already completed, including events happening today.</p>
+                            <p class="mt-3 text-sm leading-7 text-slate-600">The dashboard separates what is next from what is already completed, and keeps reminder-ready work visible.</p>
                         </div>
                         <div class="app-panel px-6 py-6">
                             <span class="section-label">Refine</span>
-                            <h2 class="section-title mt-4 text-slate-950">Update plans without risk</h2>
-                            <p class="mt-3 text-sm leading-7 text-slate-600">Each event is tied to its owner so users can only manage their own schedule and records.</p>
+                            <h2 class="section-title mt-4 text-slate-950">Share and export with control</h2>
+                            <p class="mt-3 text-sm leading-7 text-slate-600">Policies, visibility levels, shared event pages, and calendar exports make planning easier without losing control.</p>
                         </div>
                     </section>
                 </main>
