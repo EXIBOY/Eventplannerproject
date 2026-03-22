@@ -97,10 +97,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function seedDefaultEvents(): void
+    public function seedDefaultEvents(bool $replaceExisting = false): void
     {
-        if ($this->events()->exists()) {
+        if (!$replaceExisting && $this->events()->exists()) {
             return;
+        }
+
+        if ($replaceExisting) {
+            $this->events()->delete();
         }
 
         $referenceDate = today();

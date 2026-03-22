@@ -31,6 +31,6 @@ class DatabaseSeeder extends Seeder
 
         User::query()
             ->get()
-            ->each(fn (User $user) => $user->seedDefaultEvents());
+            ->each(fn (User $user) => $user->seedDefaultEvents(replaceExisting: true));
     }
 }
