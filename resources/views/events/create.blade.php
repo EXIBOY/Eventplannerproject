@@ -1,33 +1,38 @@
 <x-app-layout>
-    <div class="p-6">
-        <h1 class="text-2xl font-bold mb-4">Create Event</h1>
+    <div class="mx-auto max-w-5xl">
+        <section class="grid gap-6 lg:grid-cols-[1fr_0.36fr]">
+            <div class="app-panel px-7 py-8 sm:px-10 sm:py-10">
+                <span class="section-label">Create Event</span>
+                <h1 class="mt-5 text-5xl leading-[0.96] text-slate-950">Capture the next brief.</h1>
+                <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+                    Add the essentials now. You can refine the description and schedule details later without losing the timeline.
+                </p>
 
-        <form method="POST" action="{{ route('events.store') }}">
-            @csrf
-
-            <div class="mb-4">
-                <label>Title</label>
-                <input type="text" name="title" class="border p-2 w-full" required>
+                @include('events.partials.form', [
+                    'action' => route('events.store'),
+                    'method' => 'POST',
+                    'submitLabel' => 'Save Event',
+                ])
             </div>
 
-            <div class="mb-4">
-                <label>Description</label>
-                <textarea name="description" class="border p-2 w-full"></textarea>
-            </div>
+            <aside class="space-y-4">
+                <div class="app-panel px-6 py-6">
+                    <span class="section-label">Checklist</span>
+                    <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
+                        <p>Use a clear event title people will recognize instantly.</p>
+                        <p>Add the city, venue, or workspace in the location field.</p>
+                        <p>Descriptions work best as short operational briefs, not marketing copy.</p>
+                    </div>
+                </div>
 
-            <div class="mb-4">
-                <label>Date</label>
-                <input type="date" name="event_date" class="border p-2 w-full" required>
-            </div>
-
-            <div class="mb-4">
-                <label>Location</label>
-                <input type="text" name="location" class="border p-2 w-full" required>
-            </div>
-
-            <button class="bg-green-500 text-black px-4 py-2 rounded">
-                Save Event
-            </button>
-        </form>
+                <div class="app-panel px-6 py-6">
+                    <span class="section-label">Tip</span>
+                    <p class="mt-4 text-3xl text-slate-950">Start simple.</p>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">
+                        Once the event exists, it will immediately appear on your dashboard and event list for follow-up.
+                    </p>
+                </div>
+            </aside>
+        </section>
     </div>
 </x-app-layout>

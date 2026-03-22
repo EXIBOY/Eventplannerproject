@@ -8,16 +8,37 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
-    $eventCount = Event::where('user_id', Auth::id())->count();
+    $events = Auth::user()
+        ->events()
+        ->orderBy('event_date')
+        ->orderBy('title')
+        ->get();
 
-    $upcomingEvents = Event::where('user_id', Auth::id())
-        ->where('event_date', '>=', now())
-        ->count();
+    $today = today();
+    $upcomingSchedule = $events
+        ->filter(fn (Event $event) => $event->event_date->greaterThanOrEqualTo($today))
+        ->values();
 
-    return view('dashboard', compact('eventCount', 'upcomingEvents'));
+    $pastEvents = $events
+        ->filter(fn (Event $event) => $event->event_date->lt($today))
+        ->sortByDesc('event_date')
+        ->values();
+
+    $eventCount = $events->count();
+    $upcomingEvents = $upcomingSchedule->count();
+    $nextEvent = $upcomingSchedule->first();
+    $recentActivity = $pastEvents->take(3);
+
+    return view('dashboard', compact(
+        'eventCount',
+        'upcomingEvents',
+        'nextEvent',
+        'upcomingSchedule',
+        'recentActivity'
+    ));
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -27,7 +48,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('events', EventController::class);
+    Route::resource('events', EventController::class)->except('show');
 });
 
 require __DIR__.'/auth.php';
