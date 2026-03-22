@@ -1,9 +1,11 @@
-<form method="POST" action="{{ $action }}" class="mt-8 space-y-6">
+<form method="POST" action="{{ $action }}" class="mt-8 space-y-6" data-event-form data-mode="{{ $formMode }}">
     @csrf
 
     @if ($method !== 'POST')
         @method($method)
     @endif
+
+    <div class="ajax-feedback hidden" data-form-feedback aria-live="polite"></div>
 
     <div class="grid gap-6 md:grid-cols-2">
         <div class="md:col-span-2">
@@ -15,9 +17,11 @@
                 value="{{ old('title', $event->title) }}"
                 class="form-input"
                 placeholder="Summer Client Dinner"
+                data-error-input
                 required
             >
             <x-input-error :messages="$errors->get('title')" class="mt-2" />
+            <p class="ajax-error hidden" data-ajax-error="title"></p>
         </div>
 
         <div class="md:col-span-2">
@@ -28,8 +32,10 @@
                 rows="5"
                 class="form-input"
                 placeholder="Add the brief, run-of-show context, or any planning notes that should travel with this event."
+                data-error-input
             >{{ old('description', $event->description) }}</textarea>
             <x-input-error :messages="$errors->get('description')" class="mt-2" />
+            <p class="ajax-error hidden" data-ajax-error="description"></p>
         </div>
 
         <div>
@@ -40,9 +46,11 @@
                 name="event_date"
                 value="{{ old('event_date', $event->event_date?->format('Y-m-d')) }}"
                 class="form-input"
+                data-error-input
                 required
             >
             <x-input-error :messages="$errors->get('event_date')" class="mt-2" />
+            <p class="ajax-error hidden" data-ajax-error="event_date"></p>
         </div>
 
         <div data-device-location>
@@ -60,6 +68,7 @@
                 class="form-input"
                 placeholder="Sea Containers, London"
                 data-location-input
+                data-error-input
                 required
             >
             <p class="status-copy mt-2 text-xs leading-6 text-slate-500" data-location-status>
@@ -69,17 +78,21 @@
                 Address lookup uses OpenStreetMap Nominatim data.
             </p>
             <x-input-error :messages="$errors->get('location')" class="mt-2" />
+            <p class="ajax-error hidden" data-ajax-error="location"></p>
         </div>
     </div>
 
     <div class="soft-rule"></div>
 
     <div class="action-row">
-        <button type="submit" class="btn-primary">
+        <button type="submit" class="btn-primary" data-form-submit data-idle-label="{{ $submitLabel }}" data-pending-label="{{ $formMode === 'edit' ? 'Updating...' : 'Saving...' }}">
             {{ $submitLabel }}
         </button>
         <a href="{{ route('events.index') }}" class="btn-secondary">
             Cancel
+        </a>
+        <a href="{{ route('events.index') }}" class="btn-secondary hidden" data-form-success-link>
+            Open Events
         </a>
     </div>
 </form>

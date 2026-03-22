@@ -11,6 +11,7 @@
                 @include('events.partials.form', [
                     'action' => route('events.update', $event),
                     'method' => 'PUT',
+                    'formMode' => 'edit',
                     'submitLabel' => 'Update Event',
                 ])
             </div>

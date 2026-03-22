@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="mx-auto max-w-6xl space-y-6">
+    <div class="mx-auto max-w-6xl space-y-6" data-event-library>
         <section class="app-panel mesh-accent px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
             <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                 <div>
@@ -27,10 +27,12 @@
             </div>
         @endif
 
+        <div class="ajax-feedback hidden" data-event-action-feedback aria-live="polite"></div>
+
         <section class="grid gap-4 md:grid-cols-3">
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Upcoming</p>
-                <p class="metric-number mt-4 text-slate-950">{{ $upcomingEvents->count() }}</p>
+                <p class="metric-number mt-4 text-slate-950" data-upcoming-count>{{ $upcomingEvents->count() }}</p>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Everything still ahead, including events happening today.</p>
             </div>
             <div class="stat-card">
@@ -40,7 +42,7 @@
             </div>
             <div class="stat-card">
                 <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Focus</p>
-                <p class="section-title mt-4 text-slate-950">
+                <p class="section-title mt-4 text-slate-950" data-focus-title>
                     {{ $upcomingEvents->first()?->title ?? 'Create your next event' }}
                 </p>
                 <p class="mt-3 text-sm leading-6 text-slate-600">The first card below is your next active brief.</p>
@@ -54,12 +56,12 @@
                         <span class="section-label">Upcoming</span>
                         <h2 class="page-title mt-4 text-slate-950">Active events</h2>
                     </div>
-                    <span class="event-tag">{{ $upcomingEvents->count() }} scheduled</span>
+                    <span class="event-tag" data-scheduled-count>{{ $upcomingEvents->count() }} scheduled</span>
                 </div>
 
-                <div class="mt-8 space-y-4">
+                <div class="mt-8 space-y-4" data-upcoming-list>
                     @forelse ($upcomingEvents as $event)
-                        <div class="event-card">
+                        <div class="event-card" data-event-card data-event-id="{{ $event->id }}" data-event-title="{{ $event->title }}">
                             <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
                                     <div class="shrink-0 self-start rounded-[22px] bg-orange-100 px-4 py-3 text-center text-orange-800">
@@ -90,10 +92,10 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('events.destroy', $event) }}" method="POST">
+                                    <form action="{{ route('events.destroy', $event) }}" method="POST" data-event-delete-form>
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="w-full rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700 transition hover:-translate-y-0.5 hover:bg-rose-100 sm:w-auto sm:rounded-full sm:px-5">
+                                        <button type="submit" class="w-full rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700 transition hover:-translate-y-0.5 hover:bg-rose-100 sm:w-auto sm:rounded-full sm:px-5" data-delete-submit>
                                             Delete
                                         </button>
                                     </form>
@@ -101,18 +103,19 @@
                             </div>
                         </div>
                     @empty
-                        <div class="event-card text-center">
-                            <h3 class="section-title text-slate-950">No active events yet</h3>
-                            <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-600">
-                                Add your first brief to start building an upcoming schedule.
-                            </p>
-                            <div class="mt-6">
-                                <a href="{{ route('events.create') }}" class="btn-primary">
-                                    Create Your First Event
-                                </a>
-                            </div>
-                        </div>
                     @endforelse
+                </div>
+
+                <div class="event-card text-center {{ $upcomingEvents->isNotEmpty() ? 'hidden' : '' }}" data-upcoming-empty>
+                    <h3 class="section-title text-slate-950">No active events yet</h3>
+                    <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-600">
+                        Add your first brief to start building an upcoming schedule.
+                    </p>
+                    <div class="mt-6">
+                        <a href="{{ route('events.create') }}" class="btn-primary">
+                            Create Your First Event
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -149,6 +152,7 @@
                     <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
                         <p>Event lists are sorted by date so the next milestone stays on top.</p>
                         <p>Validation now protects empty titles, locations, and malformed dates.</p>
+                        <p>Create, update, and delete flows now support AJAX feedback instead of depending on a full page refresh.</p>
                         <p>Each edit and delete action is scoped to the signed-in user’s own events.</p>
                     </div>
                 </div>

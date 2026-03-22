@@ -1,4 +1,5 @@
 import './bootstrap';
+import './event-ajax';
 import './location-weather';
 
 import Alpine from 'alpinejs';

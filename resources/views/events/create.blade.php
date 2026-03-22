@@ -11,6 +11,7 @@
                 @include('events.partials.form', [
                     'action' => route('events.store'),
                     'method' => 'POST',
+                    'formMode' => 'create',
                     'submitLabel' => 'Save Event',
                 ])
             </div>
